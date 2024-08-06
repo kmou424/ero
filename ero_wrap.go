@@ -1,6 +1,9 @@
 package ero
 
 func (eme *eroMsgError) Wrap(err error, text string) error {
+	if err == nil {
+		return nil
+	}
 	return &eroMsgError{
 		msg: text,
 		lt:  getLineTrace(),
@@ -14,6 +17,9 @@ func Wrap(err error, text string) error {
 }
 
 func (eme *eroMsgError) UnwrapOnce(err error) error {
+	if err == nil {
+		return nil
+	}
 	e, ok := as[interface{ Child() error }](err)
 	if !ok {
 		return err
@@ -27,6 +33,9 @@ func UnwrapOnce(err error) error {
 }
 
 func UnwrapAll(err error) (errs []error) {
+	if err == nil {
+		return
+	}
 	walkUnwrap(err, func(err error, _ bool) bool {
 		errs = append(errs, err)
 		return true

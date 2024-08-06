@@ -7,7 +7,7 @@ import (
 
 func Trace(err error) string {
 	if err == nil {
-		return "<nil>"
+		return fmt.Sprint(err)
 	}
 	e := mustAs[interface{ This() *eroMsgError }](err).This()
 	return fmt.Sprintf("Error: %s\n  => at %s", e.msg, e.lt)
@@ -45,6 +45,9 @@ func unwrapError(sb *strings.Builder, err error) error {
 }
 
 func FullTrace(err error, showStackTrace ...bool) string {
+	if err == nil {
+		return fmt.Sprint(err)
+	}
 	var sb strings.Builder
 	err = unwrapError(&sb, err)
 	if len(showStackTrace) > 0 && showStackTrace[0] {
@@ -56,6 +59,9 @@ func FullTrace(err error, showStackTrace ...bool) string {
 }
 
 func StackTrace(err error) string {
+	if err == nil {
+		return fmt.Sprint(err)
+	}
 	var sb strings.Builder
 	sb.WriteString("Source Stacktrace:")
 	if e, ok := as[interface{ StackTrace() []string }](err); ok {

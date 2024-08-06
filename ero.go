@@ -28,7 +28,7 @@ func (eme *eroMsgError) StackTrace() (stackTrace []string) {
 
 func (eme *eroMsgError) Is(err error) bool {
 	if err == nil {
-		return eme == nil
+		return false
 	}
 	if EqualPtr(eme, err) {
 		return true
@@ -37,9 +37,6 @@ func (eme *eroMsgError) Is(err error) bool {
 }
 
 func (eme *eroMsgError) Error() string {
-	if eme == nil {
-		return "<nil>"
-	}
 	return eme.msg
 }
 
