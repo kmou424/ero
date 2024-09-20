@@ -29,3 +29,11 @@ func Equal(err error, target error) (isEqual bool) {
 	})
 	return
 }
+
+func IsEro(err any) bool {
+	//goland:noinspection GoTypeAssertionOnErrors
+	if _, ok := err.(*eroMsgError); ok {
+		return true
+	}
+	return false
+}
