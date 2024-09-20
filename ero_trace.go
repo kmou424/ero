@@ -5,7 +5,7 @@ import (
 	"strings"
 )
 
-func Trace(err error) string {
+func LineTrace(err error) string {
 	if err == nil {
 		return fmt.Sprint(err)
 	}
@@ -29,7 +29,7 @@ func unwrapError(sb *strings.Builder, err error) error {
 		if isChild {
 			sb.WriteString(childTrace(e))
 		} else {
-			sb.WriteString(Trace(e))
+			sb.WriteString(LineTrace(e))
 			isChild = true
 		}
 		if last {
@@ -44,7 +44,7 @@ func unwrapError(sb *strings.Builder, err error) error {
 	return lastErr
 }
 
-func FullTrace(err error, showStackTrace ...bool) string {
+func AllTrace(err error, showStackTrace ...bool) string {
 	if err == nil {
 		return fmt.Sprint(err)
 	}
