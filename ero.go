@@ -52,7 +52,7 @@ func New(text string) error {
 	return newEroError(text)
 }
 
-func NewF(format string, args ...any) error {
+func Newf(format string, args ...any) error {
 	return newEroError(fmt.Sprintf(format, args...))
 }
 
