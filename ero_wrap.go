@@ -1,5 +1,7 @@
 package ero
 
+import "fmt"
+
 func (eme *eroMsgError) Wrap(err error, text string) error {
 	if err == nil {
 		return nil
@@ -14,6 +16,10 @@ func (eme *eroMsgError) Wrap(err error, text string) error {
 func Wrap(err error, text string) error {
 	e := mustAs[interface{ Wrap(error, string) error }](err)
 	return e.Wrap(err, text)
+}
+
+func Wrapf(err error, format string, args ...any) error {
+	return Wrap(err, fmt.Sprintf(format, args...))
 }
 
 func (eme *eroMsgError) UnwrapOnce(err error) error {
