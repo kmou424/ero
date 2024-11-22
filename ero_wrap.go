@@ -1,6 +1,9 @@
 package ero
 
-import "fmt"
+import (
+	"errors"
+	"fmt"
+)
 
 func (eme *eroMsgError) Wrap(err error, text string) error {
 	if err == nil {
@@ -13,13 +16,21 @@ func (eme *eroMsgError) Wrap(err error, text string) error {
 	}
 }
 
-func Wrap(err error, text string) error {
-	e := mustAs[interface{ Wrap(error, string) error }](err)
+func Wrap(err error, text string, args ...any) error {
+	if len(args) > 0 {
+		text = fmt.Sprintf(text, args...)
+	}
+wrap:
+	e, ok := as[interface{ Wrap(error, string) error }](err)
+	if !ok {
+		if err == nil {
+			err = errors.New("nil error")
+		} else {
+			err = newEroError(err.Error())
+		}
+		goto wrap
+	}
 	return e.Wrap(err, text)
-}
-
-func Wrapf(err error, format string, args ...any) error {
-	return Wrap(err, fmt.Sprintf(format, args...))
 }
 
 func (eme *eroMsgError) UnwrapOnce(err error) error {
