@@ -62,6 +62,13 @@ func StackTrace(err error) string {
 	if err == nil {
 		return fmt.Sprint(err)
 	}
+	for { // iterate over all wrapped errors
+		child := UnwrapOnce(err)
+		if child == nil {
+			break
+		}
+		err = child
+	}
 	var sb strings.Builder
 	sb.WriteString("Source Stacktrace:")
 	if e, ok := as[interface{ StackTrace() []string }](err); ok {
