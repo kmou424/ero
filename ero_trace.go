@@ -5,14 +5,6 @@ import (
 	"strings"
 )
 
-func LineTrace(err error) string {
-	if err == nil {
-		return fmt.Sprint(err)
-	}
-	e := mustAs[interface{ This() *eroMsgError }](err).This()
-	return fmt.Sprintf("Error: %s\n  => at %s", e.msg, e.lt)
-}
-
 func unwrapError(sb *strings.Builder, err error) error {
 	isChild := false
 	var lastErr error
@@ -44,7 +36,15 @@ func unwrapError(sb *strings.Builder, err error) error {
 	return lastErr
 }
 
-func AllTrace(err error, showStackTrace ...bool) string {
+func LineTrace(err error) string {
+	if err == nil {
+		return fmt.Sprint(err)
+	}
+	e := mustAs[interface{ This() *eroMsgError }](err).This()
+	return fmt.Sprintf("Error: %s\n  => at %s", e.msg, e.lt)
+}
+
+func FullTrace(err error, showStackTrace ...bool) string {
 	if err == nil {
 		return fmt.Sprint(err)
 	}

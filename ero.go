@@ -37,6 +37,16 @@ func (eme *eroMsgError) Is(err error) bool {
 }
 
 func (eme *eroMsgError) Error() string {
+	switch GetTraceLevel() {
+	case TraceLevelNone:
+		return eme.msg
+	case TraceLevelLine:
+		return LineTrace(eme)
+	case TraceLevelFull:
+		return FullTrace(eme, false)
+	case TraceLevelFullWithStack:
+		return FullTrace(eme, true)
+	}
 	return eme.msg
 }
 
